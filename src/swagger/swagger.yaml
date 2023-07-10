@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: My TypeScript API
+  version: 1.0.0
+paths:
+  /api/users/get:
+    get:
+      summary: Get user by ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/users/create:
+    post:
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDTO'
+      responses:
+        '201':
+          description: User created successfully
+  /api/users/update:
+    patch:
+      summary: update a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDTO'
+      responses:
+        '201':
+          description: User updated successfully
+  /api/users/delete:
+    delete:
+      summary: delete a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteUserDTO'
+      responses:
+        '201':
+          description: User deleted successfully
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    CreateUserDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    UpdateUserDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        email:
+          type: string
+    DeleteUserDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        
