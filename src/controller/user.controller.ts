@@ -4,21 +4,35 @@ import userModel from '../model/user.model';
 import ResponseStatus from '../responses/response';
 import { validate } from '../middleware/validate.middleware';
 import { createUser as validateUser, updateUser } from '../validations/user.validations';
-
+import { SendEmail } from '../decorator/sendEmail.decorator';
 export default class UserController implements IController {
-  public path = '/users';
+  
+  public userRoutes = '/users';
+  public permissionRoutes= '/permissions';
+  public rolePermissionRoutes= '/rolePermissions';
+  public roleRoutes= '/roles';
+  
   public router = Router();
 
   constructor() {
-    this.initializeRoutes();
+    this.initializeUsersRoutes();
+    this.initializePermissionRoutes();
   }
 
-  private initializeRoutes(): void {
-    this.router.get(`${this.path}/get`, this.getAllUsers);
-    this.router.get(`${this.path}/:id`, this.getUserById);
-    this.router.post(`${this.path}/create`, validate(validateUser), this.createUser);
-    this.router.patch(`${this.path}/update`, validate(updateUser), this.updateUser);
-    this.router.delete(`${this.path}/delete`, this.deleteUser);
+  private initializeUsersRoutes(): void {
+    this.router.get(`${this.userRoutes}/get`, this.getAllUsers);
+    this.router.get(`${this.userRoutes}/:id`, this.getUserById);
+    this.router.post(`${this.userRoutes}/create`, validate(validateUser), this.createUser);
+    this.router.patch(`${this.userRoutes}/update`, validate(updateUser), this.updateUser);
+    this.router.delete(`${this.userRoutes}/delete`, this.deleteUser);
+  }
+
+  private initializePermissionRoutes(): void {
+    this.router.get(`${this.permissionRoutes}/get`, this.getAllUsers);
+    this.router.get(`${this.permissionRoutes}/:id`, this.getUserById);
+    this.router.post(`${this.permissionRoutes}/create`, validate(validateUser), this.createUser);
+    this.router.patch(`${this.permissionRoutes}/update`, validate(updateUser), this.updateUser);
+    this.router.delete(`${this.permissionRoutes}/delete`, this.deleteUser);
   }
 
   private async getUserById(req: Request, res: Response, next: NextFunction): Promise<Response> {
@@ -57,24 +71,26 @@ export default class UserController implements IController {
       });
     }
   }
-
+  @SendEmail()
   private async createUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
-    try {
-      console.log("inside create");
-      const user = req.body;
-      const result = await userModel.createUser(user);
-      const [getUser] = await userModel.getUser(result?.insertId);
-      return res.status(ResponseStatus.CREATED).json({
-        status: 'success',
-        user: getUser,
-      });
-    } catch (er: any) {
-      return res.status(ResponseStatus.SERVER_ERROR).json({
-        status: 'failed',
-        error: er.message,
-      });
-    }
+  try {
+    console.log("inside create");
+    const user = req.body;
+    const result = await userModel.createUser(user);
+    const [getUser] = await userModel.getUser(result?.insertId);
+    console.log("before decorator");
+    return res.status(ResponseStatus.CREATED).json({
+      status: 'success',
+      user: getUser,
+    });
+  } catch (er: any) {
+    return res.status(ResponseStatus.SERVER_ERROR).json({
+      status: 'failed',
+      error: er.message,
+    });
   }
+}
+
 
   private async updateUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
     try {

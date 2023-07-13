@@ -1,6 +1,10 @@
 import { Router } from 'express';
 
 export interface IController {
-  path: string;
-  router: Router;
+  userRoutes: string;
+  permissionRoutes: string;
+  rolePermissionRoutes: string;
+  roleRoutes: string;
+
+  router:Router;
 }

@@ -15,9 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_provider_1 = __importDefault(require("../provider/db.provider"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 class UserModel {
+    //@EncryptPass()
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             user.password = yield bcrypt_1.default.hash(user.password, 13);
+            console.log(`INSERT into users (${Object.keys(user).join(',')}) values(${Array.from({ length: Object.keys(user).length }).map(() => '?')})`, [...Object.values(user)]);
             return yield (0, db_provider_1.default)(`INSERT into users (${Object.keys(user).join(',')}) values(${Array.from({ length: Object.keys(user).length }).map(() => '?')})`, [...Object.values(user)]);
         });
     }
@@ -29,12 +31,12 @@ class UserModel {
     }
     getUser(userid) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (0, db_provider_1.default)('Select first_name, last_name, email,id from users where id = ?', [userid]);
+            return (0, db_provider_1.default)('Select * from users where id = ?', [userid]);
         });
     }
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            return (0, db_provider_1.default)('Select first_name, last_name, email,id from users');
+            return (0, db_provider_1.default)('Select * from users');
         });
     }
     deleteUser(userid) {

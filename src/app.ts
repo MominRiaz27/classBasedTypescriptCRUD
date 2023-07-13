@@ -1,3 +1,4 @@
+//import { userModel } from '@/model/user.model';
 import { IController } from './interface/controller.interface';
 import cors from 'cors';
 import express, { Application } from 'express';
@@ -6,7 +7,7 @@ import debug from 'debug';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
-console.log(`__dirname.split(path.sep).pop()}/swagger/swagger.yaml`);
+import bodyParser from 'body-parser';
 const swaggerDocument = YAML.load(`${__dirname.split(path.sep).pop()}/swagger/swagger.yaml`);
 
 const debugLog: debug.IDebugger = debug('app');
@@ -26,6 +27,8 @@ export default class App {
     //this.express.use(helmet());
     this.express.use(cors());
     this.express.use(express.json());
+    this.express.use(bodyParser.json());
+    this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(express.urlencoded({ extended: true }));
     this.express.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
