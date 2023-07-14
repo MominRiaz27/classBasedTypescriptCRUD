@@ -19,128 +19,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_model_1 = __importDefault(require("../model/user.model"));
-const response_1 = __importDefault(require("../responses/response"));
 const validate_middleware_1 = require("../middleware/validate.middleware");
 const user_validations_1 = require("../validations/user.validations");
 const sendEmail_decorator_1 = require("../decorator/sendEmail.decorator");
+const users_1 = __importDefault(require("./users"));
 class UserController {
     constructor() {
-        this.path = '/users';
+        this.userRoutes = '/users';
+        this.permissionRoutes = '/permissions';
+        this.rolePermissionRoutes = '/rolePermissions';
+        this.roleRoutes = '/roles';
         this.router = (0, express_1.Router)();
-        this.initializeRoutes();
+        this.initializeUsersRoutes();
+        this.initializePermissionRoutes();
     }
-    initializeRoutes() {
-        this.router.get(`${this.path}/get`, this.getAllUsers);
-        this.router.get(`${this.path}/:id`, this.getUserById);
-        this.router.post(`${this.path}/create`, (0, validate_middleware_1.validate)(user_validations_1.createUser), this.createUser);
-        this.router.patch(`${this.path}/update`, (0, validate_middleware_1.validate)(user_validations_1.updateUser), this.updateUser);
-        this.router.delete(`${this.path}/delete`, this.deleteUser);
+    initializeUsersRoutes() {
+        this.router.get(`${this.userRoutes}/get`, this.getAllUsers);
+        this.router.get(`${this.userRoutes}/getById`, this.getUserById);
+        this.router.post(`${this.userRoutes}/create`, (0, validate_middleware_1.validate)(user_validations_1.createUser), this.createUser);
+        this.router.patch(`${this.userRoutes}/update`, (0, validate_middleware_1.validate)(user_validations_1.updateUser), this.updateUser);
+        this.router.delete(`${this.userRoutes}/delete`, this.deleteUser);
+    }
+    initializePermissionRoutes() {
+        this.router.get(`${this.permissionRoutes}/get`, this.getAllUsers);
+        this.router.get(`${this.permissionRoutes}/:id`, this.getUserById);
+        this.router.post(`${this.permissionRoutes}/create`, (0, validate_middleware_1.validate)(user_validations_1.createUser), this.createUser);
+        this.router.patch(`${this.permissionRoutes}/update`, (0, validate_middleware_1.validate)(user_validations_1.updateUser), this.updateUser);
+        this.router.delete(`${this.permissionRoutes}/delete`, this.deleteUser);
+    }
+    createUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield users_1.default.createuser(req, res, next);
+            return result;
+        });
     }
     getUserById(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const user = yield user_model_1.default.getUser(req.params.id);
-                console.log('user', user);
-                if (!user || user.length === 0)
-                    return res.status(response_1.default.NOT_FOUND).json({
-                        status: 'not found',
-                        message: 'User not found',
-                    });
-                return res.status(response_1.default.OK).json({
-                    status: 'success',
-                    user,
-                });
-            }
-            catch (er) {
-                return res.status(response_1.default.SERVER_ERROR).json({
-                    status: 'failed',
-                    error: er.message,
-                });
-            }
+            const result = yield users_1.default.getuserbyid(req, res, next);
+            return result;
         });
     }
     getAllUsers(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                console.log("inside get all");
-                const users = yield user_model_1.default.getAllUsers();
-                return res.status(response_1.default.OK).json({
-                    status: 'success',
-                    users: users,
-                });
-            }
-            catch (er) {
-                return res.status(response_1.default.SERVER_ERROR).json({
-                    status: 'failed',
-                    error: er.message,
-                });
-            }
-        });
-    }
-    createUser(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                console.log("inside create");
-                const user = req.body;
-                const result = yield user_model_1.default.createUser(user);
-                const [getUser] = yield user_model_1.default.getUser(result === null || result === void 0 ? void 0 : result.insertId);
-                console.log("before decorator");
-                return res.status(response_1.default.CREATED).json({
-                    status: 'success',
-                    user: getUser,
-                });
-            }
-            catch (er) {
-                return res.status(response_1.default.SERVER_ERROR).json({
-                    status: 'failed',
-                    error: er.message,
-                });
-            }
+            const result = yield users_1.default.getallusers(req, res, next);
+            return result;
         });
     }
     updateUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                console.log("inside update");
-                const user = req.body;
-                const result = yield user_model_1.default.updateUser(user, user.id);
-                console.log('result', result);
-                const [getUser] = yield user_model_1.default.getUser(user.id);
-                return res.status(response_1.default.OK).json({
-                    status: 'success',
-                    user: getUser,
-                });
-            }
-            catch (er) {
-                return res.status(response_1.default.SERVER_ERROR).json({
-                    status: 'failed',
-                    error: er.message,
-                });
-            }
+            const result = yield users_1.default.updateuser(req, res, next);
+            return result;
         });
     }
     deleteUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                console.log("inside delete");
-                const result = yield user_model_1.default.deleteUser(req.body.id);
-                if (result.affectedRows > 0)
-                    return res.status(response_1.default.OK).json({
-                        status: 'success',
-                        message: 'Record deleted successfully',
-                    });
-                return res.status(response_1.default.NOT_FOUND).json({
-                    status: 'not found',
-                    message: 'No User found against this id',
-                });
-            }
-            catch (er) {
-                return res.status(response_1.default.SERVER_ERROR).json({
-                    status: 'failed',
-                    error: er.message,
-                });
-            }
+            const result = yield users_1.default.deleteuser(req, res, next);
+            return result;
         });
     }
 }

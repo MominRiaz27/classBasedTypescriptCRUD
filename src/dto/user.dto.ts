@@ -2,6 +2,7 @@ export interface CreateUserDto {
     name:string,
     email: string;
     password: string;
+    user_type_id: number
   }
   
   export type PatchUserDto = Partial<CreateUserDto>;
@@ -10,4 +11,6 @@ export interface CreateUserDto {
     id: number;
     createdAt: Date;
   }
+  
+
   

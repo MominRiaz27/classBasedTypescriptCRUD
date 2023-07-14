@@ -6,6 +6,8 @@ paths:
   /api/users/get:
     get:
       summary: Get user by ID
+      tags:
+          - Users API's
       responses:
         '200':
           description: Successful response
@@ -16,6 +18,8 @@ paths:
   /api/users/create:
     post:
       summary: Create a user
+      tags:
+          - Users API's
       requestBody:
         required: true
         content:
@@ -28,6 +32,8 @@ paths:
   /api/users/update:
     patch:
       summary: update a user
+      tags:
+          - Users API's
       requestBody:
         required: true
         content:
@@ -40,6 +46,8 @@ paths:
   /api/users/delete:
     delete:
       summary: delete a user
+      tags:
+          - Users API's
       requestBody:
         required: true
         content:
@@ -49,15 +57,183 @@ paths:
       responses:
         '201':
           description: User deleted successfully
+  /api/permissions/get:
+    get:
+      summary: Get Permissions
+      tags:
+          - Permissions API's
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permission'
+  /api/permissions/create:
+    post:
+      summary: Create a Permission
+      tags:
+          - Permissions API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePermissionDTO'
+      responses:
+        '201':
+          description: Permission created successfully
+  /api/permissions/update:
+    patch:
+      summary: update a Permission
+      tags:
+          - Permissions API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePermissionDTO'
+      responses:
+        '201':
+          description: Permission updated successfully
+  /api/permissions/delete:
+    delete:
+      summary: delete a Permission
+      tags:
+          - Permissions API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletePermissionDTO'
+      responses:
+        '201':
+          description: User deleted successfully
+  /api/roles/get:
+    get:
+      summary: Get Roles
+      tags:
+          - Roles API's
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+  /api/roles/create:
+    post:
+      summary: Create a Role
+      tags:
+          - Roles API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleDTO'
+      responses:
+        '201':
+          description: Role created successfully
+  /api/roles/update:
+    patch:
+      summary: update a Role
+      tags:
+          - Roles API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleDTO'
+      responses:
+        '201':
+          description: Role updated successfully
+  /api/roles/delete:
+    delete:
+      summary: delete a role
+      tags:
+          - Roles API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteRoleDTO'
+      responses:
+        '201':
+          description: Role deleted successfully
+  /api/rolepermissions/get:
+    get:
+      summary: Get RolesPermissions
+      tags:
+          - RolesPermission API's
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolePermission'
+  /api/rolepermissions/create:
+    post:
+      summary: Create a RolePermission
+      tags:
+          - RolesPermission API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRolePermissionDTO'
+      responses:
+        '201':
+          description: RolePermission created successfully
+  /api/rolepermissions/update:
+    patch:
+      summary: update a RolePermission
+      tags:
+          - RolesPermission API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRolePermissionDTO'
+      responses:
+        '201':
+          description: RolePermission updated successfully
+  /api/rolepermissions/delete:
+    delete:
+      summary: delete a RolePermission
+      tags:
+          - RolesPermission API's
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteRolePermissionDTO'
+      responses:
+        '201':
+          description: Role deleted successfully        
 components:
   schemas:
     User:
       type: object
       properties:
+        id:
+          type: number
         name:
           type: string
         email:
           type: string
+        password:
+          type: string
+        user_type_id:
+          type: number  
     CreateUserDTO:
       type: object
       properties:
@@ -65,6 +241,10 @@ components:
           type: string
         email:
           type: string
+        password:
+          type: string
+        user_type_id:
+          type: number
     UpdateUserDTO:
       type: object
       properties:
@@ -74,9 +254,97 @@ components:
           type: string
         email:
           type: string
+        password:
+          type: string
+        user_type_id:
+          type: number  
     DeleteUserDTO:
       type: object
       properties:
         id:
           type: number
+    Permission:
+      type: object
+      properties:
+        id:
+          type: number
+        permission_name:
+          type: string  
+    CreatePermissionDTO:
+      type: object
+      properties:
+        permission_name:
+          type: string
+    UpdatePermissionDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        permission_name:
+          type: string  
+    DeletePermissionDTO:
+      type: object
+      properties:
+        id:
+          type: number
+    Role:
+      type: object
+      properties:
+        id:
+          type: number
+        type:
+          type: string  
+    CreateRoleDTO:
+      type: object
+      properties:
+        type:
+          type: string
+    UpdateRoleDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        type:
+          type: string  
+    DeleteRoleDTO:
+      type: object
+      properties:
+        id:
+          type: number
+    RolePermission:
+      type: object
+      properties:
+        id:
+          type: number
+        user_type_id:
+          type: number
+        permission_id:
+          type: number
+        route:
+          type: string  
+    CreateRolePermissionDTO:
+      type: object
+      properties:
+        user_type_id:
+          type: number
+        permission_id:
+          type: number
+        route:
+          type: string
+    UpdateRolePermissionDTO:
+      type: object
+      properties:
+        id:
+          type: number
+        user_type_id:
+          type: number
+        permission_id:
+          type: number
+        route:
+          type: string  
+    DeleteRolePermissionDTO:
+      type: object
+      properties:
+        id:
+          type: number              
         

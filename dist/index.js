@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("module-alias/register");
 require("dotenv/config");
 const app_1 = __importDefault(require("./app"));
-const user_controller_1 = __importDefault(require("./controller/user.controller"));
-const app = new app_1.default([new user_controller_1.default()], Number(process.env.PORT));
+const controller_1 = __importDefault(require("./controller/controller"));
+const app = new app_1.default([new controller_1.default()], Number(process.env.PORT));
 app.listen();

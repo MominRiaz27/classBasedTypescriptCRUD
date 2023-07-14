@@ -2,7 +2,7 @@ import { PatchUserDto } from './../dto/user.dto';
 import { CreateUserDto } from '../dto/user.dto';
 import QueryDB from '../provider/db.provider';
 import bcrypt from 'bcrypt';
-import { EncryptPass } from '../decorator/encryptPass.decorator';
+//import { EncryptPass } from '../decorator/encryptPass.decorator';
 
 
 class UserModel {
@@ -23,6 +23,7 @@ class UserModel {
   }
 
   public async getUser(userid: string) {
+    console.log("inside get model");
     return QueryDB('Select * from users where id = ?', [userid]);
   }
   public async getAllUsers() {

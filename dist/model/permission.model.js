@@ -13,38 +13,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_provider_1 = __importDefault(require("../provider/db.provider"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 //import { EncryptPass } from '../decorator/encryptPass.decorator';
-class UserModel {
+class PermissionModel {
     //@EncryptPass()
-    createUser(user) {
+    createPermission(permission) {
         return __awaiter(this, void 0, void 0, function* () {
-            user.password = yield bcrypt_1.default.hash(user.password, 13);
-            console.log(`INSERT into users (${Object.keys(user).join(',')}) values(${Array.from({ length: Object.keys(user).length }).map(() => '?')})`, [...Object.values(user)]);
-            return yield (0, db_provider_1.default)(`INSERT into users (${Object.keys(user).join(',')}) values(${Array.from({ length: Object.keys(user).length }).map(() => '?')})`, [...Object.values(user)]);
+            console.log(`INSERT into permissions (${Object.keys(permission).join(',')}) values(${Array.from({ length: Object.keys(permission).length }).map(() => '?')})`, [...Object.values(permission)]);
+            return yield (0, db_provider_1.default)(`INSERT into permissions (${Object.keys(permission).join(',')}) values(${Array.from({ length: Object.keys(permission).length }).map(() => '?')})`, [...Object.values(permission)]);
         });
     }
-    updateUser(user, id) {
+    updatePermission(user, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `Update users set ${Object.entries(user).map(([key, val]) => key + '=' + `"${val}"`)} where id = ?`;
+            const query = `Update permissions set ${Object.entries(user).map(([key, val]) => key + '=' + `"${val}"`)} where id = ?`;
             return yield (0, db_provider_1.default)(query, [id]);
         });
     }
-    getUser(userid) {
+    getPermission(permissionid) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("inside get model");
-            return (0, db_provider_1.default)('Select * from users where id = ?', [userid]);
+            return (0, db_provider_1.default)('Select * from permissions where id = ?', [permissionid]);
         });
     }
-    getAllUsers() {
+    getAllPermission() {
         return __awaiter(this, void 0, void 0, function* () {
-            return (0, db_provider_1.default)('Select * from users');
+            return (0, db_provider_1.default)('Select * from permissions');
         });
     }
-    deleteUser(userid) {
+    deletePermission(permissionid) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (0, db_provider_1.default)('Delete from users where id = ?', [userid]);
+            return (0, db_provider_1.default)('Delete from permissions where id = ?', [permissionid]);
         });
     }
 }
-exports.default = new UserModel();
+exports.default = new PermissionModel();
